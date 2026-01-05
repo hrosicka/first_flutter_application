@@ -1,41 +1,59 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MojeAplikace());
-}
+void main() => runApp(const MojeAppka());
 
-class MojeAplikace extends StatefulWidget {
-  const MojeAplikace({super.key});
-
-  @override
-  State<MojeAplikace> createState() => _MojeAplikaceState();
-}
-
-class _MojeAplikaceState extends State<MojeAplikace> {
-  int pocitadlo = 0; // Tady ukládáme číslo
+class MojeAppka extends StatelessWidget {
+  const MojeAppka({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(title: const Text('Moje První Appka')),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text('Kliknul jsi tolikrát:'),
-              Text('$pocitadlo', style: const TextStyle(fontSize: 40)),
-            ],
-          ),
+      debugShowCheckedModeBanner: false,
+      home: PocitadloStranka(),
+    );
+  }
+}
+
+class PocitadloStranka extends StatefulWidget {
+  const PocitadloStranka({super.key});
+
+  @override
+  _PocitadloStrankaState createState() => _PocitadloStrankaState();
+}
+
+class _PocitadloStrankaState extends State<PocitadloStranka> {
+  int _pocet = 0; // Proměnná, která drží číslo
+
+  void _zvysitCislo() {
+    setState(() {
+      _pocet++; // Zvětší číslo o 1 a překreslí obrazovku
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Moje Flutter Appka'),
+        backgroundColor: Colors.deepPurple,
+        foregroundColor: Colors.white,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Počet kliknutí:', style: TextStyle(fontSize: 18)),
+            Text(
+              '$_pocet', 
+              style: const TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+            ),
+          ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            setState(() {
-              pocitadlo++; // Přičte 1 a překreslí obrazovku
-            });
-          },
-          child: const Icon(Icons.add),
-        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _zvysitCislo,
+        backgroundColor: Colors.deepPurple,
+        child: const Icon(Icons.add),
       ),
     );
   }
