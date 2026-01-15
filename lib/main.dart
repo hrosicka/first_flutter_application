@@ -9,7 +9,8 @@ class MojeAppka extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: PocitadloStranka(),
+      theme: ThemeData(useMaterial3: true, colorSchemeSeed: Colors.deepPurple),
+      home: const PocitadloStranka(),
     );
   }
 }
@@ -22,38 +23,74 @@ class PocitadloStranka extends StatefulWidget {
 }
 
 class _PocitadloStrankaState extends State<PocitadloStranka> {
-  int _pocet = 0; // Proměnná, která drží číslo
+  int _pocet = 0;
 
-  void _zvysitCislo() {
+  void _zmenitCislo(int hodnota) {
     setState(() {
-      _pocet++; // Zvětší číslo o 1 a překreslí obrazovku
+      _pocet += hodnota;
+      if (_pocet < 0) _pocet = 0; // Zamezíme záporným číslům
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    // Dynamická barva: pokud je > 10, bude zelená, jinak hluboce fialová
+    Color barvaCisla = _pocet >= 10 ? Colors.green : Colors.deepPurple;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Moje Flutter Appka'),
-        backgroundColor: Colors.deepPurple,
-        foregroundColor: Colors.white,
+        title: const Text('Moje Vylepšená Appka'),
+        centerTitle: true,
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Počet kliknutí:', style: TextStyle(fontSize: 18)),
-            Text(
-              '$_pocet', 
-              style: const TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+            Card(
+              elevation: 5,
+              child: Padding(
+                padding: const EdgeInsets.all(30.0),
+                child: Column(
+                  children: [
+                    const Text('Aktuální stav:', style: TextStyle(fontSize: 16)),
+                    Text(
+                      '$_pocet',
+                      style: TextStyle(
+                        fontSize: 80, 
+                        fontWeight: FontWeight.bold, 
+                        color: barvaCisla
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton.icon(
+                  onPressed: () => _zmenitCislo(-1),
+                  icon: const Icon(Icons.remove),
+                  label: const Text('Odebrat'),
+                  style: ElevatedButton.styleFrom(foregroundColor: Colors.red),
+                ),
+                const SizedBox(width: 20),
+                ElevatedButton.icon(
+                  onPressed: () => _zmenitCislo(1),
+                  icon: const Icon(Icons.add),
+                  label: const Text('Přidat'),
+                  style: ElevatedButton.styleFrom(foregroundColor: Colors.green),
+                ),
+              ],
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _zvysitCislo,
-        backgroundColor: Colors.deepPurple,
-        child: const Icon(Icons.add),
+        onPressed: () => setState(() => _pocet = 0),
+        tooltip: 'Resetovat',
+        child: const Icon(Icons.refresh),
       ),
     );
   }
