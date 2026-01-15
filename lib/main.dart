@@ -53,12 +53,24 @@ class _PocitadloStrankaState extends State<PocitadloStranka> {
                 child: Column(
                   children: [
                     const Text('Aktuální stav:', style: TextStyle(fontSize: 16)),
-                    Text(
-                      '$_pocet',
-                      style: TextStyle(
-                        fontSize: 80, 
-                        fontWeight: FontWeight.bold, 
-                        color: barvaCisla
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      transitionBuilder: (Widget child, Animation<double> animation) {
+                        // Skvělý efekt: kombinace zvětšení (Scale) a průhlednosti (Fade)
+                        return ScaleTransition(
+                          scale: animation,
+                          child: FadeTransition(opacity: animation, child: child),
+                        );
+                      },
+                      child: Text(
+                        '$_pocet',
+                        // Klíč je kriticky důležitý pro spuštění animace!
+                        key: ValueKey<int>(_pocet), 
+                        style: TextStyle(
+                          fontSize: 80,
+                          fontWeight: FontWeight.bold,
+                          color: barvaCisla,
+                        ),
                       ),
                     ),
                   ],
